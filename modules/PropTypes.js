@@ -1,15 +1,16 @@
-var assign = require('object-assign');
-var ReactPropTypes = require('react').PropTypes;
-var Route = require('./Route');
+var assign = require("object-assign");
+var ReactPropTypes = require("prop-types");
+var Route = require("./Route");
 
 var PropTypes = assign({}, ReactPropTypes, {
-
   /**
    * Indicates that a prop should be falsy.
    */
   falsy(props, propName, componentName) {
     if (props[propName])
-      return new Error(`<${componentName}> should not have a "${propName}" prop`);
+      return new Error(
+        `<${componentName}> should not have a "${propName}" prop`
+      );
   },
 
   /**
@@ -22,7 +23,6 @@ var PropTypes = assign({}, ReactPropTypes, {
    */
   //router: ReactPropTypes.instanceOf(Router) // TODO
   router: ReactPropTypes.func
-
 });
 
 module.exports = PropTypes;

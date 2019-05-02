@@ -1,6 +1,6 @@
 {
   "name": "react-router",
-  "version": "0.13.6",
+  "version": "0.14.0",
   "description": "A complete routing library for React.js",
   "main": "modules",
   "repository": {
@@ -53,6 +53,7 @@
     "can-use-dom": "0.1.0",
     "invariant": "^2.0.0",
     "object-assign": "^2.0.0",
+    "prop-types": "^15.7.2",
     "qs": "2.4.1"
   },
   "tags": [
