@@ -15,14 +15,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "react": "0.13.x || 0.14.x || ^15.0.1"
+    "react": "0.13.x || 0.14.x || ^15.0.1 || ^16.0.0"
   },
   "dependencies": {
     "can-use-dom": "0.1.0",
     "invariant": "^2.0.0",
     "object-assign": "^2.0.0",
     "prop-types": "^15.7.2",
-    "qs": "2.4.1"
+    "qs": "2.4.1",
+    "react-dom-factories": "^1.0.2"
   },
   "tags": [
     "react",

@@ -1,4 +1,4 @@
-var PropTypes = require('./PropTypes');
+var PropTypes = require("./PropTypes");
 
 /**
  * A mixin for components that need to know the path, routes, URL
@@ -14,12 +14,11 @@ var PropTypes = require('./PropTypes');
  *       if (this.isActive('about'))
  *         className += ' is-active';
  *
- *       return React.DOM.a({ className: className }, this.props.children);
+ *         return <a className={className}>{this.props.children}</a>;
  *     }
  *   });
  */
 var State = {
-
   contextTypes: {
     router: PropTypes.router.isRequired
   },
@@ -66,7 +65,6 @@ var State = {
   isActive(to, params, query) {
     return this.context.router.isActive(to, params, query);
   }
-
 };
 
 module.exports = State;

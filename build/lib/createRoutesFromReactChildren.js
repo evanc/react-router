@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require('react');
+var PropTypes = require('prop-types');
 var assign = require('object-assign');
 var warning = require('./warning');
 var DefaultRoute = require('./components/DefaultRoute');
@@ -14,7 +15,7 @@ function checkPropTypes(componentName, propTypes, props) {
 
   for (var propName in propTypes) {
     if (propTypes.hasOwnProperty(propName)) {
-      var error = propTypes[propName](props, propName, componentName);
+      var error = PropTypes.checkPropTypes(propTypes[propName], props, propName, componentName);
 
       if (error instanceof Error) warning(false, error.message);
     }

@@ -20,7 +20,8 @@ var Cancellation = require('./Cancellation');
 var Match = require('./Match');
 var Route = require('./Route');
 var supportsHistory = require('./supportsHistory');
-var PathUtils = require('./PathUtils');
+var PathUtils = require('./PathUtils')
+var createReactClass = require("create-react-class");
 
 /**
  * The default location for new routers.
@@ -157,7 +158,7 @@ function createRouter(options) {
   if (location === HistoryLocation && !supportsHistory())
     location = RefreshLocation;
 
-  var Router = React.createClass({
+  var Router = createReactClass({
 
     displayName: 'Router',
 

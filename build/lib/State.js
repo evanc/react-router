@@ -16,7 +16,7 @@ var PropTypes = require('./PropTypes');
  *       if (this.isActive('about'))
  *         className += ' is-active';
  *
- *       return React.DOM.a({ className: className }, this.props.children);
+ *       return DOM.a({ className: className }, this.props.children);
  *     }
  *   });
  */
