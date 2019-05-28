@@ -1,22 +1,26 @@
 /* jshint -W084 */
-var React = require('react');
-var PropTypes = require('prop-types');
-var assign = require('object-assign');
-var warning = require('./warning');
-var DefaultRoute = require('./components/DefaultRoute');
-var NotFoundRoute = require('./components/NotFoundRoute');
-var Redirect = require('./components/Redirect');
-var Route = require('./Route');
+var React = require("react");
+var PropTypes = require("prop-types");
+var assign = require("object-assign");
+var warning = require("./warning");
+var DefaultRoute = require("./components/DefaultRoute");
+var NotFoundRoute = require("./components/NotFoundRoute");
+var Redirect = require("./components/Redirect");
+var Route = require("./Route");
 
 function checkPropTypes(componentName, propTypes, props) {
-  componentName = componentName || 'UnknownComponent';
+  componentName = componentName || "UnknownComponent";
 
   for (var propName in propTypes) {
     if (propTypes.hasOwnProperty(propName)) {
-      var error = PropTypes.checkPropTypes(propTypes[propName], props, propName, componentName);
+      var error = PropTypes.checkPropTypes(
+        propTypes,
+        props,
+        propName,
+        componentName
+      );
 
-      if (error instanceof Error)
-        warning(false, error.message);
+      if (error instanceof Error) warning(false, error.message);
     }
   }
 }
@@ -34,14 +38,12 @@ function createRouteOptions(props) {
 }
 
 function createRouteFromReactElement(element) {
-  if (!React.isValidElement(element))
-    return;
+  if (!React.isValidElement(element)) return;
 
   var type = element.type;
   var props = assign({}, type.defaultProps, element.props);
 
-  if (type.propTypes)
-    checkPropTypes(type.displayName, type.propTypes, props);
+  if (type.propTypes) checkPropTypes(type.displayName, type.propTypes, props);
 
   if (type === DefaultRoute)
     return Route.createDefaultRoute(createRouteOptions(props));
@@ -49,12 +51,10 @@ function createRouteFromReactElement(element) {
   if (type === NotFoundRoute)
     return Route.createNotFoundRoute(createRouteOptions(props));
 
-  if (type === Redirect)
-    return Route.createRedirect(createRouteOptions(props));
+  if (type === Redirect) return Route.createRedirect(createRouteOptions(props));
 
-  return Route.createRoute(createRouteOptions(props), function () {
-    if (props.children)
-      createRoutesFromReactChildren(props.children);
+  return Route.createRoute(createRouteOptions(props), function() {
+    if (props.children) createRoutesFromReactChildren(props.children);
   });
 }
 
@@ -77,9 +77,8 @@ function createRouteFromReactElement(element) {
 function createRoutesFromReactChildren(children) {
   var routes = [];
 
-  React.Children.forEach(children, function (child) {
-    if (child = createRouteFromReactElement(child))
-      routes.push(child);
+  React.Children.forEach(children, function(child) {
+    if ((child = createRouteFromReactElement(child))) routes.push(child);
   });
 
   return routes;

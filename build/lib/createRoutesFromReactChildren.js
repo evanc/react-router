@@ -1,21 +1,21 @@
 /* jshint -W084 */
-'use strict';
+"use strict";
 
-var React = require('react');
-var PropTypes = require('prop-types');
-var assign = require('object-assign');
-var warning = require('./warning');
-var DefaultRoute = require('./components/DefaultRoute');
-var NotFoundRoute = require('./components/NotFoundRoute');
-var Redirect = require('./components/Redirect');
-var Route = require('./Route');
+var React = require("react");
+var PropTypes = require("prop-types");
+var assign = require("object-assign");
+var warning = require("./warning");
+var DefaultRoute = require("./components/DefaultRoute");
+var NotFoundRoute = require("./components/NotFoundRoute");
+var Redirect = require("./components/Redirect");
+var Route = require("./Route");
 
 function checkPropTypes(componentName, propTypes, props) {
-  componentName = componentName || 'UnknownComponent';
+  componentName = componentName || "UnknownComponent";
 
   for (var propName in propTypes) {
     if (propTypes.hasOwnProperty(propName)) {
-      var error = PropTypes.checkPropTypes(propTypes[propName], props, propName, componentName);
+      var error = PropTypes.checkPropTypes(propTypes, props, propName, componentName);
 
       if (error instanceof Error) warning(false, error.message);
     }
