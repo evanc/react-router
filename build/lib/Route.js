@@ -1,19 +1,18 @@
-'use strict';
+"use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var assign = require('object-assign');
-var invariant = require('invariant');
-var warning = require('./warning');
-var PathUtils = require('./PathUtils');
+var invariant = require("invariant");
+var warning = require("./warning");
+var PathUtils = require("./PathUtils");
 
 var _currentRoute;
 
 var Route = (function () {
   _createClass(Route, null, [{
-    key: 'createRoute',
+    key: "createRoute",
 
     /**
      * Creates and returns a new route. Options may be a URL pathname string
@@ -54,12 +53,12 @@ var Route = (function () {
     value: function createRoute(options, callback) {
       options = options || {};
 
-      if (typeof options === 'string') options = { path: options };
+      if (typeof options === "string") options = { path: options };
 
       var parentRoute = _currentRoute;
 
       if (parentRoute) {
-        warning(options.parentRoute == null || options.parentRoute === parentRoute, 'You should not use parentRoute with createRoute inside another route\'s child callback; it is ignored');
+        warning(options.parentRoute == null || options.parentRoute === parentRoute, "You should not use parentRoute with createRoute inside another route's child callback; it is ignored");
       } else {
         parentRoute = options.parentRoute;
       }
@@ -76,23 +75,23 @@ var Route = (function () {
           // Relative paths extend their parent.
           path = PathUtils.join(parentRoute.path, path);
         } else {
-          path = '/' + path;
+          path = "/" + path;
         }
       } else {
-        path = parentRoute ? parentRoute.path : '/';
+        path = parentRoute ? parentRoute.path : "/";
       }
 
-      if (options.isNotFound && !/\*$/.test(path)) path += '*'; // Auto-append * to the path of not found routes.
+      if (options.isNotFound && !/\*$/.test(path)) path += "*"; // Auto-append * to the path of not found routes.
 
       var route = new Route(name, path, options.ignoreScrollBehavior, options.isDefault, options.isNotFound, options.onEnter, options.onLeave, options.handler);
 
       if (parentRoute) {
         if (route.isDefault) {
-          invariant(parentRoute.defaultRoute == null, '%s may not have more than one default route', parentRoute);
+          invariant(parentRoute.defaultRoute == null, "%s may not have more than one default route", parentRoute);
 
           parentRoute.defaultRoute = route;
         } else if (route.isNotFound) {
-          invariant(parentRoute.notFoundRoute == null, '%s may not have more than one not found route', parentRoute);
+          invariant(parentRoute.notFoundRoute == null, "%s may not have more than one not found route", parentRoute);
 
           parentRoute.notFoundRoute = route;
         }
@@ -102,7 +101,7 @@ var Route = (function () {
 
       // Any routes created in the callback
       // use this route as their parent.
-      if (typeof callback === 'function') {
+      if (typeof callback === "function") {
         var currentRoute = _currentRoute;
         _currentRoute = route;
         callback.call(route, route);
@@ -117,9 +116,9 @@ var Route = (function () {
      * the current URL.
      */
   }, {
-    key: 'createDefaultRoute',
+    key: "createDefaultRoute",
     value: function createDefaultRoute(options) {
-      return Route.createRoute(assign({}, options, { isDefault: true }));
+      return Route.createRoute(Object.assign({}, options, { isDefault: true }));
     }
 
     /**
@@ -127,9 +126,9 @@ var Route = (function () {
      * the current URL but none of its siblings do.
      */
   }, {
-    key: 'createNotFoundRoute',
+    key: "createNotFoundRoute",
     value: function createNotFoundRoute(options) {
-      return Route.createRoute(assign({}, options, { isNotFound: true }));
+      return Route.createRoute(Object.assign({}, options, { isNotFound: true }));
     }
 
     /**
@@ -145,10 +144,10 @@ var Route = (function () {
      *                to using the current query
      */
   }, {
-    key: 'createRedirect',
+    key: "createRedirect",
     value: function createRedirect(options) {
-      return Route.createRoute(assign({}, options, {
-        path: options.path || options.from || '*',
+      return Route.createRoute(Object.assign({}, options, {
+        path: options.path || options.from || "*",
         onEnter: function onEnter(transition, params, query) {
           transition.redirect(options.to, options.params || params, options.query || query);
         }
@@ -175,22 +174,22 @@ var Route = (function () {
    */
 
   _createClass(Route, [{
-    key: 'appendChild',
+    key: "appendChild",
     value: function appendChild(route) {
-      invariant(route instanceof Route, 'route.appendChild must use a valid Route');
+      invariant(route instanceof Route, "route.appendChild must use a valid Route");
 
       if (!this.childRoutes) this.childRoutes = [];
 
       this.childRoutes.push(route);
     }
   }, {
-    key: 'toString',
+    key: "toString",
     value: function toString() {
-      var string = '<Route';
+      var string = "<Route";
 
-      if (this.name) string += ' name="' + this.name + '"';
+      if (this.name) string += " name=\"" + this.name + "\"";
 
-      string += ' path="' + this.path + '">';
+      string += " path=\"" + this.path + "\">";
 
       return string;
     }

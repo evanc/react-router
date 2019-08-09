@@ -1,8 +1,7 @@
-var assign = require("object-assign");
 var ReactPropTypes = require("prop-types");
 var Route = require("./Route");
 
-var PropTypes = assign({}, ReactPropTypes, {
+var PropTypes = Object.assign({}, ReactPropTypes, {
   /**
    * Indicates that a prop should be falsy.
    */

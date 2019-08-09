@@ -1,6 +1,5 @@
-var React = require('react');
-var assign = require('object-assign');
-var PropTypes = require('../PropTypes');
+var React = require("react");
+var PropTypes = require("../PropTypes");
 var DOM = require("react-dom-factories");
 
 function isLeftClickEvent(event) {
@@ -30,16 +29,13 @@ function isModifiedEvent(event) {
  *   <Link to="showPost" params={{ postID: "123" }} query={{ show:true }}/>
  */
 class Link extends React.Component {
-
   handleClick(event) {
     var allowTransition = true;
     var clickResult;
 
-    if (this.props.onClick)
-      clickResult = this.props.onClick(event);
+    if (this.props.onClick) clickResult = this.props.onClick(event);
 
-    if (isModifiedEvent(event) || !isLeftClickEvent(event))
-      return;
+    if (isModifiedEvent(event) || !isLeftClickEvent(event)) return;
 
     if (clickResult === false || event.defaultPrevented === true)
       allowTransition = false;
@@ -47,14 +43,22 @@ class Link extends React.Component {
     event.preventDefault();
 
     if (allowTransition)
-      this.context.router.transitionTo(this.props.to, this.props.params, this.props.query);
+      this.context.router.transitionTo(
+        this.props.to,
+        this.props.params,
+        this.props.query
+      );
   }
 
   /**
    * Returns the value of the "href" attribute to use on the DOM element.
    */
   getHref() {
-    return this.context.router.makeHref(this.props.to, this.props.params, this.props.query);
+    return this.context.router.makeHref(
+      this.props.to,
+      this.props.params,
+      this.props.query
+    );
   }
 
   /**
@@ -62,20 +66,23 @@ class Link extends React.Component {
    * the value of the activeClassName property when this <Link> is active.
    */
   getClassName() {
-    var className = this.props.className
+    var className = this.props.className;
 
-    if (this.getActiveState())
-      className += ` ${ this.props.activeClassName }`
+    if (this.getActiveState()) className += ` ${this.props.activeClassName}`;
 
-    return className
+    return className;
   }
 
   getActiveState() {
-    return this.context.router.isActive(this.props.to, this.props.params, this.props.query);
+    return this.context.router.isActive(
+      this.props.to,
+      this.props.params,
+      this.props.query
+    );
   }
 
   render() {
-    var props = assign({}, this.props, {
+    var props = Object.assign({}, this.props, {
       href: this.getHref(),
       className: this.getClassName(),
       onClick: this.handleClick.bind(this)
@@ -92,7 +99,6 @@ class Link extends React.Component {
 
     return DOM.a(props, this.props.children);
   }
-
 }
 
 // TODO: Include these in the above class definition
@@ -105,7 +111,7 @@ Link.contextTypes = {
 
 Link.propTypes = {
   activeClassName: PropTypes.string.isRequired,
-  to: PropTypes.oneOfType([ PropTypes.string, PropTypes.route ]).isRequired,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.route]).isRequired,
   params: PropTypes.object,
   query: PropTypes.object,
   activeStyle: PropTypes.object,
@@ -113,8 +119,8 @@ Link.propTypes = {
 };
 
 Link.defaultProps = {
-  activeClassName: 'active',
-  className: ''
+  activeClassName: "active",
+  className: ""
 };
 
 module.exports = Link;

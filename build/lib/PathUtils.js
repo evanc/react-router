@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
 
-var invariant = require('invariant');
-var assign = require('object-assign');
-var qs = require('qs');
+var invariant = require("invariant");
+var qs = require("qs");
 
 var paramCompileMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$]*)|[*.()\[\]\\+|{}^$]/g;
 var paramInjectMatcher = /:([a-zA-Z_$][a-zA-Z0-9_$?]*[?]?)|[*]/g;
@@ -17,17 +16,17 @@ function compilePattern(pattern) {
     var source = pattern.replace(paramCompileMatcher, function (match, paramName) {
       if (paramName) {
         paramNames.push(paramName);
-        return '([^/?#]+)';
-      } else if (match === '*') {
-        paramNames.push('splat');
-        return '(.*?)';
+        return "([^/?#]+)";
+      } else if (match === "*") {
+        paramNames.push("splat");
+        return "(.*?)";
       } else {
-        return '\\' + match;
+        return "\\" + match;
       }
     });
 
     _compiledPatterns[pattern] = {
-      matcher: new RegExp('^' + source + '$', 'i'),
+      matcher: new RegExp("^" + source + "$", "i"),
       paramNames: paramNames
     };
   }
@@ -36,19 +35,18 @@ function compilePattern(pattern) {
 }
 
 var PathUtils = {
-
   /**
    * Returns true if the given path is absolute.
    */
   isAbsolute: function isAbsolute(path) {
-    return path.charAt(0) === '/';
+    return path.charAt(0) === "/";
   },
 
   /**
    * Joins two URL paths together.
    */
   join: function join(a, b) {
-    return a.replace(/\/*$/, '/') + b;
+    return a.replace(/\/*$/, "/") + b;
   },
 
   /**
@@ -92,19 +90,19 @@ var PathUtils = {
     var splatIndex = 0;
 
     return pattern.replace(paramInjectMatcher, function (match, paramName) {
-      paramName = paramName || 'splat';
+      paramName = paramName || "splat";
 
       // If param is optional don't check for existence
-      if (paramName.slice(-1) === '?') {
+      if (paramName.slice(-1) === "?") {
         paramName = paramName.slice(0, -1);
 
-        if (params[paramName] == null) return '';
+        if (params[paramName] == null) return "";
       } else {
         invariant(params[paramName] != null, 'Missing "%s" parameter for path "%s"', paramName, pattern);
       }
 
       var segment;
-      if (paramName === 'splat' && Array.isArray(params[paramName])) {
+      if (paramName === "splat" && Array.isArray(params[paramName])) {
         segment = params[paramName][splatIndex++];
 
         invariant(segment != null, 'Missing splat # %s for path "%s"', splatIndex, pattern);
@@ -113,7 +111,7 @@ var PathUtils = {
       }
 
       return segment;
-    }).replace(paramInjectTrailingSlashMatcher, '/');
+    }).replace(paramInjectTrailingSlashMatcher, "/");
   },
 
   /**
@@ -129,7 +127,7 @@ var PathUtils = {
    * Returns a version of the given path without the query string.
    */
   withoutQuery: function withoutQuery(path) {
-    return path.replace(queryMatcher, '');
+    return path.replace(queryMatcher, "");
   },
 
   /**
@@ -139,15 +137,14 @@ var PathUtils = {
   withQuery: function withQuery(path, query) {
     var existingQuery = PathUtils.extractQuery(path);
 
-    if (existingQuery) query = query ? assign(existingQuery, query) : existingQuery;
+    if (existingQuery) query = query ? Object.assign(existingQuery, query) : existingQuery;
 
-    var queryString = qs.stringify(query, { arrayFormat: 'brackets' });
+    var queryString = qs.stringify(query, { arrayFormat: "brackets" });
 
-    if (queryString) return PathUtils.withoutQuery(path) + '?' + queryString;
+    if (queryString) return PathUtils.withoutQuery(path) + "?" + queryString;
 
     return PathUtils.withoutQuery(path);
   }
-
 };
 
 module.exports = PathUtils;

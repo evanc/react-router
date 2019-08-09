@@ -1,12 +1,10 @@
-var assign = require('object-assign');
-var invariant = require('invariant');
-var warning = require('./warning');
-var PathUtils = require('./PathUtils');
+var invariant = require("invariant");
+var warning = require("./warning");
+var PathUtils = require("./PathUtils");
 
 var _currentRoute;
 
 class Route {
-
   /**
    * Creates and returns a new route. Options may be a URL pathname string
    * with placeholders for named params or an object with any of the following
@@ -46,15 +44,14 @@ class Route {
   static createRoute(options, callback) {
     options = options || {};
 
-    if (typeof options === 'string')
-      options = { path: options };
+    if (typeof options === "string") options = { path: options };
 
     var parentRoute = _currentRoute;
 
     if (parentRoute) {
       warning(
         options.parentRoute == null || options.parentRoute === parentRoute,
-        'You should not use parentRoute with createRoute inside another route\'s child callback; it is ignored'
+        "You should not use parentRoute with createRoute inside another route's child callback; it is ignored"
       );
     } else {
       parentRoute = options.parentRoute;
@@ -69,21 +66,21 @@ class Route {
           invariant(
             path === parentRoute.path || parentRoute.paramNames.length === 0,
             'You cannot nest path "%s" inside "%s"; the parent requires URL parameters',
-            path, parentRoute.path
+            path,
+            parentRoute.path
           );
         }
       } else if (parentRoute) {
         // Relative paths extend their parent.
         path = PathUtils.join(parentRoute.path, path);
       } else {
-        path = '/' + path;
+        path = "/" + path;
       }
     } else {
-      path = parentRoute ? parentRoute.path : '/';
+      path = parentRoute ? parentRoute.path : "/";
     }
 
-    if (options.isNotFound && !(/\*$/).test(path))
-      path += '*'; // Auto-append * to the path of not found routes.
+    if (options.isNotFound && !/\*$/.test(path)) path += "*"; // Auto-append * to the path of not found routes.
 
     var route = new Route(
       name,
@@ -100,7 +97,7 @@ class Route {
       if (route.isDefault) {
         invariant(
           parentRoute.defaultRoute == null,
-          '%s may not have more than one default route',
+          "%s may not have more than one default route",
           parentRoute
         );
 
@@ -108,7 +105,7 @@ class Route {
       } else if (route.isNotFound) {
         invariant(
           parentRoute.notFoundRoute == null,
-          '%s may not have more than one not found route',
+          "%s may not have more than one not found route",
           parentRoute
         );
 
@@ -120,7 +117,7 @@ class Route {
 
     // Any routes created in the callback
     // use this route as their parent.
-    if (typeof callback === 'function') {
+    if (typeof callback === "function") {
       var currentRoute = _currentRoute;
       _currentRoute = route;
       callback.call(route, route);
@@ -135,9 +132,7 @@ class Route {
    * the current URL.
    */
   static createDefaultRoute(options) {
-    return Route.createRoute(
-      assign({}, options, { isDefault: true })
-    );
+    return Route.createRoute(Object.assign({}, options, { isDefault: true }));
   }
 
   /**
@@ -145,9 +140,7 @@ class Route {
    * the current URL but none of its siblings do.
    */
   static createNotFoundRoute(options) {
-    return Route.createRoute(
-      assign({}, options, { isNotFound: true })
-    );
+    return Route.createRoute(Object.assign({}, options, { isNotFound: true }));
   }
 
   /**
@@ -164,16 +157,29 @@ class Route {
    */
   static createRedirect(options) {
     return Route.createRoute(
-      assign({}, options, {
-        path: options.path || options.from || '*',
-        onEnter: function (transition, params, query) {
-          transition.redirect(options.to, options.params || params, options.query || query);
+      Object.assign({}, options, {
+        path: options.path || options.from || "*",
+        onEnter: function(transition, params, query) {
+          transition.redirect(
+            options.to,
+            options.params || params,
+            options.query || query
+          );
         }
       })
     );
   }
 
-  constructor(name, path, ignoreScrollBehavior, isDefault, isNotFound, onEnter, onLeave, handler) {
+  constructor(
+    name,
+    path,
+    ignoreScrollBehavior,
+    isDefault,
+    isNotFound,
+    onEnter,
+    onLeave,
+    handler
+  ) {
     this.name = name;
     this.path = path;
     this.paramNames = PathUtils.extractParamNames(this.path);
@@ -191,26 +197,23 @@ class Route {
   appendChild(route) {
     invariant(
       route instanceof Route,
-      'route.appendChild must use a valid Route'
+      "route.appendChild must use a valid Route"
     );
 
-    if (!this.childRoutes)
-      this.childRoutes = [];
+    if (!this.childRoutes) this.childRoutes = [];
 
     this.childRoutes.push(route);
   }
 
   toString() {
-    var string = '<Route';
+    var string = "<Route";
 
-    if (this.name)
-      string += ` name="${this.name}"`;
+    if (this.name) string += ` name="${this.name}"`;
 
     string += ` path="${this.path}">`;
 
     return string;
   }
-
 }
 
 module.exports = Route;

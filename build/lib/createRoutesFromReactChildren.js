@@ -3,7 +3,6 @@
 
 var React = require("react");
 var PropTypes = require("prop-types");
-var assign = require("object-assign");
 var warning = require("./warning");
 var DefaultRoute = require("./components/DefaultRoute");
 var NotFoundRoute = require("./components/NotFoundRoute");
@@ -23,7 +22,7 @@ function checkPropTypes(componentName, propTypes, props) {
 }
 
 function createRouteOptions(props) {
-  var options = assign({}, props);
+  var options = Object.assign({}, props);
   var handler = options.handler;
 
   if (handler) {
@@ -38,7 +37,7 @@ function createRouteFromReactElement(element) {
   if (!React.isValidElement(element)) return;
 
   var type = element.type;
-  var props = assign({}, type.defaultProps, element.props);
+  var props = Object.assign({}, type.defaultProps, element.props);
 
   if (type.propTypes) checkPropTypes(type.displayName, type.propTypes, props);
 

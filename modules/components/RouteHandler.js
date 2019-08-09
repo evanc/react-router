@@ -1,16 +1,14 @@
-var React = require('react');
-var ContextWrapper = require('./ContextWrapper')
-var assign = require('object-assign');
-var PropTypes = require('../PropTypes');
+var React = require("react");
+var ContextWrapper = require("./ContextWrapper");
+var PropTypes = require("../PropTypes");
 
-var REF_NAME = '__routeHandler__';
+var REF_NAME = "__routeHandler__";
 
 /**
  * A <RouteHandler> component renders the active child route handler
  * when routes are nested.
  */
 class RouteHandler extends React.Component {
-
   getChildContext() {
     return {
       routeDepth: this.context.routeDepth + 1
@@ -30,7 +28,10 @@ class RouteHandler extends React.Component {
   }
 
   _updateRouteComponent(component) {
-    this.context.router.setRouteComponentAtDepth(this.getRouteDepth(), component);
+    this.context.router.setRouteComponentAtDepth(
+      this.getRouteDepth(),
+      component
+    );
   }
 
   getRouteDepth() {
@@ -40,10 +41,9 @@ class RouteHandler extends React.Component {
   createChildRouteHandler(props) {
     var route = this.context.router.getRouteAtDepth(this.getRouteDepth());
 
-    if (route == null)
-      return null;
+    if (route == null) return null;
 
-    var childProps = assign({}, props || this.props, {
+    var childProps = Object.assign({}, props || this.props, {
       ref: REF_NAME,
       params: this.context.router.getCurrentParams(),
       query: this.context.router.getCurrentQuery()
@@ -55,9 +55,8 @@ class RouteHandler extends React.Component {
   render() {
     var handler = this.createChildRouteHandler();
     // <script/> for things like <CSSTransitionGroup/> that don't like null
-    return handler ? <ContextWrapper>{handler}</ContextWrapper> : <script/>;
+    return handler ? <ContextWrapper>{handler}</ContextWrapper> : <script />;
   }
-
 }
 
 // TODO: Include these in the above class definition
